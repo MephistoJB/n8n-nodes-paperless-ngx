@@ -1,6 +1,6 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
 // Disabled because this file defines the version-specific implementation of the node
-import { INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
+import { INodeTypeDescription } from 'n8n-workflow';
 
 import * as asn from './asn/asn.resource';
 import * as correspondent from './correspondent/correspondent.resource';
@@ -21,10 +21,10 @@ export const description: INodeTypeDescription = {
 	description: 'Consume documents and metadata from Paperless-ngx API',
 	defaults: { name: 'Paperless-ngx' },
 
-	credentials: [{ name: 'paperlessApi', required: true }],
-	inputs: [NodeConnectionType.Main],
-	// eslint-disable-next-line n8n-nodes-base/node-class-description-outputs-wrong
-	outputs: [NodeConnectionType.Main],
+credentials: [{ name: 'paperlessApi', required: true }],
+  inputs: ['main'],
+  // eslint-disable-next-line n8n-nodes-base/node-class-description-outputs-wrong
+  outputs: ['main'],
 
 	properties: [
 		{
