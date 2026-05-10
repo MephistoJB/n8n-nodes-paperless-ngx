@@ -3,6 +3,7 @@ import {
 	INodeListSearchResult,
 	INodeParameterResourceLocator,
 } from 'n8n-workflow';
+import { getDocumentId } from '../actions/document/utils';
 import { apiRequestPaginated } from '../transport';
 
 async function resourceSearch(
@@ -30,20 +31,18 @@ async function resourceSearch(
 			undefined,
 			query,
 		)) as {
-			body: {
-				correspondents: { id: number; name: string }[];
-				custom_fields: { id: number; name: string }[];
-				documents: { id: number; title: string }[];
-				document_types: { id: number; name: string }[];
-				storage_paths: { id: number; name: string }[];
-				tags: { id: number; name: string }[];
-			};
+			correspondents?: { id: number; name: string }[];
+			custom_fields?: { id: number; name: string }[];
+			documents?: { id: number; title: string }[];
+			document_types?: { id: number; name: string }[];
+			storage_paths?: { id: number; name: string }[];
+			tags?: { id: number; name: string }[];
 		}[];
 
 		const [result] = responses;
 		return {
 			results: result
-				? result.body[resource].map((item) => ({
+				? (result[resource] ?? []).map((item) => ({
 						name: String(item[accessor as keyof typeof item]),
 						value: item.id,
 					}))
@@ -53,15 +52,13 @@ async function resourceSearch(
 
 	const endpoint = `/${resource}/`;
 	const responses = (await apiRequestPaginated.call(this, 0, 'GET', endpoint)) as {
-		body: { results: { id: number; name: string }[] };
+		id: number;
+		name?: string;
+		title?: string;
 	}[];
 
 	// NOTE: We limit the results to 30 to avoid performance issues
-	const results = responses
-		.reduce<
-			{ id: number; name: string }[]
-		>((acc, response) => acc.concat(response.body.results), [])
-		.slice(0, 30);
+	const results = responses.slice(0, 30);
 
 	return {
 		results: results.map((item) => ({
@@ -117,17 +114,19 @@ export async function documentNoteSearch(
 	this: ILoadOptionsFunctions,
 	filter?: string,
 ): Promise<INodeListSearchResult> {
-	const documentId = (this.getCurrentNodeParameter('id') as INodeParameterResourceLocator).value;
+	const documentId = getDocumentId(
+		(this.getCurrentNodeParameter('id') as INodeParameterResourceLocator).value,
+	);
 
 	const endpoint = `/documents/${documentId}/notes/`;
 	const responses = (await apiRequestPaginated.call(this, 0, 'GET', endpoint)) as {
-		body: { id: number; note: string }[];
+		id: number;
+		note: string;
 	}[];
 
 	// NOTE: We limit the results to 30 to avoid performance issues
 	return {
 		results: responses
-			.reduce<{ id: number; note: string }[]>((acc, response) => acc.concat(response.body), [])
 			.filter((item) => !filter || item.note.includes(filter))
 			.slice(0, 30)
 			.map((item) => ({

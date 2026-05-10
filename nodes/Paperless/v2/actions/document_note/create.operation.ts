@@ -106,5 +106,5 @@ export async function execute(
 
 	const response = (await apiRequest.call(this, itemIndex, 'POST', endpoint, body)) as any;
 
-	return { json: { results: [response] } };
+	return { json: { results: Array.isArray(response) ? response : [response] } };
 }

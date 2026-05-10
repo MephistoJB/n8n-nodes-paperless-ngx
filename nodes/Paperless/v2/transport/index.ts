@@ -99,7 +99,9 @@ export async function apiRequestPaginated(
 			itemIndex,
 		)) as { results?: unknown[]; next?: string | null };
 
-		if (Array.isArray(response.results)) {
+		if (Array.isArray(response)) {
+			results.push(...response);
+		} else if (Array.isArray(response.results)) {
 			results.push(...response.results);
 		} else {
 			results.push(response);

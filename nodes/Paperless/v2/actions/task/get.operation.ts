@@ -31,10 +31,7 @@ export async function execute(
 	const responses = (await apiRequestPaginated.call(this, itemIndex, 'GET', endpoint)) as any[];
 
 	const task_id = this.getNodeParameter('id', itemIndex);
-	const task = responses
-		.map((response) => response.body)
-		.flat()
-		.find((task: any) => task.task_id === task_id);
+	const task = responses.find((task: any) => task.task_id === task_id);
 
 	if (!task) {
 		throw new NodeOperationError(this.getNode(), `Task with ID ${task_id} not found.`);

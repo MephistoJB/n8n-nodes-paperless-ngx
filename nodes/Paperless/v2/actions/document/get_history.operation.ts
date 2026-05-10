@@ -3,7 +3,6 @@ import {
 	INodeExecutionData,
 	INodeParameterResourceLocator,
 	INodeProperties,
-	NodeOperationError,
 } from 'n8n-workflow';
 import { apiRequestPaginated } from '../../transport';
 import { getDocumentId } from './utils';
@@ -85,20 +84,5 @@ export async function execute(
 	const endpoint = `/documents/${id}/history/`;
 	const responses = (await apiRequestPaginated.call(this, itemIndex, 'GET', endpoint)) as any[];
 
-	const statusCode =
-		responses.reduce((acc, response) => acc + response.statusCode, 0) / responses.length;
-	if (statusCode !== 200) {
-		throw new NodeOperationError(
-			this.getNode(),
-			`The documents you are requesting could not be found`,
-			{
-				description: JSON.stringify(
-					responses.map((response) => response?.body?.details ?? response?.statusMessage),
-				),
-			},
-		);
-	}
-	return {
-		json: { results: responses.map((response) => response.body) },
-	};
+	return { json: { results: responses } };
 }

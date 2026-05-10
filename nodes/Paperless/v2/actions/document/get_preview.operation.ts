@@ -3,6 +3,7 @@ import {
 	INodeExecutionData,
 	INodeParameterResourceLocator,
 	INodeProperties,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { apiRequest } from '../../transport';
 import { getDocumentId } from './utils';
@@ -89,21 +90,31 @@ export async function execute(
 		`${endpoint}/preview/`,
 		undefined,
 		undefined,
-		{ resolveWithFullResponse: true },
+		{ encoding: null, json: false, resolveWithFullResponse: true },
 	)) as any;
+	const contentType = String(preview.headers?.['content-type'] ?? 'application/pdf');
+
+	if (contentType.includes('text/html')) {
+		throw new NodeOperationError(
+			this.getNode(),
+			'Paperless returned HTML instead of preview binary.',
+			{
+				description:
+					'Check the Paperless URL in the credentials. It should point to the Paperless API host, not to the frontend HTML route.',
+			},
+		);
+	}
+
 	const filename =
 		preview.headers['content-disposition']
 			?.match(/filename="(?:b['"])?([^"]+)(?:['"])?"/)?.[1]
 			?.replace(/^['"]|['"]$/g, '') ?? `${id}.pdf`;
+	const previewBody = Buffer.isBuffer(preview.body) ? preview.body : Buffer.from(preview.body);
 
 	return {
 		json: {},
 		binary: {
-			data: await this.helpers.prepareBinaryData(
-				Buffer.from(preview.body),
-				filename,
-				'application/pdf',
-			),
+			data: await this.helpers.prepareBinaryData(previewBody, filename, contentType),
 		},
 	};
 }
