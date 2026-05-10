@@ -1,6 +1,6 @@
 {
-	"name": "@n8n-chezmoi-sh/n8n-nodes-paperless",
-	"version": "0.1.2",
+	"name": "@mephistojb/n8n-nodes-paperless",
+	"version": "0.2.7",
 	"description": "N8N community node manage your documents with Paperless-ngx.",
 	"keywords": [
 		"n8n-community-node-package",
@@ -8,19 +8,19 @@
 		"paperless-ngx"
 	],
 	"license": "MIT",
-	"homepage": "https://github.com/chezmoi-sh/n8n-nodes-paperless-ngx#readme",
+	"homepage": "https://github.com/MephistoJB/n8n-nodes-paperless-ngx#readme",
 	"author": {
 		"name": "Alexandre NICOLAIE",
 		"email": "xunleii@users.noreply.github.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/chezmoi-sh/n8n-nodes-paperless-ngx.git"
+		"url": "git+https://github.com/MephistoJB/n8n-nodes-paperless-ngx.git"
 	},
-"engines": {
-    "node": ">=20.0",
-    "pnpm": ">=9.1"
-  },
+	"engines": {
+		"node": ">=20.0",
+		"pnpm": ">=9.1"
+	},
 	"packageManager": "pnpm@9.15.4",
 	"main": "index.js",
 	"scripts": {
@@ -34,7 +34,9 @@
 		"prepublishOnly": "pnpm build && pnpm lint -c .eslintrc.prepublish.js nodes credentials package.json"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"nodes/**/*.svg",
+		"nodes/**/*.png"
 	],
 	"n8n": {
 		"n8nNodesApiVersion": 1,
@@ -63,6 +65,6 @@
 		"form-data": "^4.0.1"
 	},
 	"bugs": {
-		"url": "https://github.com/chezmoi-sh/n8n-nodes-paperless-ngx/issues"
+		"url": "https://github.com/MephistoJB/n8n-nodes-paperless-ngx/issues"
 	}
 }

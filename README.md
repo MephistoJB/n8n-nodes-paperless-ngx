@@ -2,19 +2,19 @@
 
 ![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
 
-# n8n-nodes-paperless
+# @mephistojb/n8n-nodes-paperless
 
 <!-- trunk-ignore-begin(markdownlint/MD033) -->
 <div align="center">
 	<img 
-		src="https://raw.githubusercontent.com/chezmoi-sh/n8n-nodes-paperless/refs/heads/main/nodes/Paperless/v2/paperless-ngx.svg"
+		src="https://raw.githubusercontent.com/MephistoJB/n8n-nodes-paperless-ngx/refs/heads/main/nodes/Paperless/v2/paperless-ngx.svg"
 		alt="Paperless Icon"
 		height="50px"
 	>
 </div>
 <!-- trunk-ignore-end(markdownlint/MD033) -->
 
-This is a n8n community node. It lets you use [Paperless-ngx](https://docs.paperless-ngx.com/) in your n8n workflows.
+This is an independent n8n community node package. It lets you use [Paperless-ngx](https://docs.paperless-ngx.com/) in your n8n workflows.
 
 Paperless-ngx is a document management system that transforms your physical documents into a searchable online archive so you can keep your paper documents, but lose the cabinet.
 
@@ -27,6 +27,12 @@ Paperless-ngx is a document management system that transforms your physical docu
 ## Installation
 
 Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+
+Install this package in n8n as:
+
+```text
+@mephistojb/n8n-nodes-paperless
+```
 
 > [!NOTE]
 > This node requires the `form-data` package for handling multipart/form-data requests. It will be automatically installed as a dependency if not already present in your n8n installation.
@@ -98,6 +104,8 @@ You need to provide the following to authenticate:
 - Paperless-ngx instance URL
 - API token
 
+The instance URL can be either the Paperless-ngx base URL, such as `http://paperless:8000`, or the API URL, such as `http://paperless:8000/api`.
+
 To get your API token:
 
 1. Login to your Paperless-ngx instance
@@ -110,10 +118,12 @@ Requires n8n version 1.0.0 or later and Paperless-ngx version 2.14.0 or later. E
 
 ## Resources
 
+- [GitHub repository](https://github.com/MephistoJB/n8n-nodes-paperless-ngx)
+- [npm package](https://www.npmjs.com/package/@mephistojb/n8n-nodes-paperless)
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
 - [Paperless-ngx documentation](https://docs.paperless-ngx.com/)
 - [Paperless-ngx API documentation](https://docs.paperless-ngx.com/api/)
 
 ## License
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+[MIT](./LICENSE.md)

@@ -8,8 +8,8 @@ export class PaperlessApi implements ICredentialType {
 	properties: INodeProperties[] = [
 		{
 			name: 'url',
-			displayName: 'Paperless-ngx API URL',
-			default: 'http://paperless:8000/api',
+			displayName: 'Paperless-ngx URL',
+			default: 'http://paperless:8000',
 			required: true,
 			type: 'string',
 			validateType: 'url',

@@ -12,5 +12,7 @@ function copyIcons() {
 	const credSource = path.resolve('credentials', '**', '*.{png,svg}');
 	const credDestination = path.resolve('dist', 'credentials');
 
-	return src(credSource).pipe(dest(credDestination));
+	src(credSource).pipe(dest(credDestination));
+
+	return src('nodes/Paperless/v2/*.svg').pipe(dest('dist/nodes/Paperless'));
 }
