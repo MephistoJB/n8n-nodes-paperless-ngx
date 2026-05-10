@@ -83,6 +83,37 @@ export async function execute(
 	);
 	const endpoint = `/documents/${id}/`;
 	const response = (await apiRequest.call(this, itemIndex, 'GET', endpoint)) as any;
+	const document = (await apiRequest.call(
+		this,
+		itemIndex,
+		'GET',
+		`${endpoint}download/`,
+		undefined,
+		undefined,
+		{
+			encoding: null,
+			json: false,
+			resolveWithFullResponse: true,
+		},
+	)) as { body: Buffer | string; headers: Record<string, string | undefined> };
+	const contentType = document.headers['content-type'] ?? 'application/octet-stream';
+	const filename =
+		document.headers['content-disposition']
+			?.match(/filename\*=utf-8''([^;]+)|filename="([^"]+)"/)
+			?.slice(1)
+			.find(Boolean) ??
+		response.archived_file_name ??
+		response.original_file_name ??
+		`${id}.pdf`;
 
-	return { json: { results: [response] } };
+	return {
+		json: { results: [response] },
+		binary: {
+			data: await this.helpers.prepareBinaryData(
+				Buffer.isBuffer(document.body) ? document.body : Buffer.from(document.body),
+				decodeURIComponent(filename),
+				contentType,
+			),
+		},
+	};
 }

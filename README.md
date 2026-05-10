@@ -60,7 +60,7 @@ The node supports the following resources and operations:
 ### Document
 
 - Create/Update/Delete document
-- Get a document
+- Get a document, including metadata JSON and the original file as binary data
 - Get document history
 - Get document metadata
 - Get metadata suggestions
