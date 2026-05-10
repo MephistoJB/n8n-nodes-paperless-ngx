@@ -3,6 +3,7 @@ import {
 	INodeExecutionData,
 	INodeParameterResourceLocator,
 	INodeProperties,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { apiRequest } from '../../transport';
 import { getDocumentId } from './utils';
@@ -83,6 +84,18 @@ export async function execute(
 	);
 	const endpoint = `/documents/${id}/`;
 	const response = (await apiRequest.call(this, itemIndex, 'GET', endpoint)) as any;
+
+	if (typeof response !== 'object' || response === null || typeof response.id === 'undefined') {
+		throw new NodeOperationError(
+			this.getNode(),
+			`Paperless did not return document metadata for ID "${id}"`,
+			{
+				description:
+					'Check that the credential URL points to the Paperless instance and that the document URL contains a valid document ID.',
+			},
+		);
+	}
+
 	const document = (await apiRequest.call(
 		this,
 		itemIndex,
@@ -97,6 +110,18 @@ export async function execute(
 		},
 	)) as { body: Buffer | string; headers: Record<string, string | undefined> };
 	const contentType = document.headers['content-type'] ?? 'application/octet-stream';
+
+	if (contentType.includes('text/html')) {
+		throw new NodeOperationError(
+			this.getNode(),
+			`Paperless returned HTML instead of the document binary for ID "${id}"`,
+			{
+				description:
+					'Check that the credential URL points to the Paperless instance and that the document exists.',
+			},
+		);
+	}
+
 	const filename =
 		document.headers['content-disposition']
 			?.match(/filename\*=utf-8''([^;]+)|filename="([^"]+)"/)
