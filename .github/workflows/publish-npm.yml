@@ -1,11 +1,14 @@
 name: Publish to npm
 
 on:
+  push:
+    branches: [main]
   release:
     types: [published]
+  workflow_dispatch:
 
 concurrency:
-  group: npm-publish-${{ github.ref }}
+  group: npm-publish
   cancel-in-progress: false
 
 permissions:
@@ -14,7 +17,7 @@ permissions:
 
 jobs:
   publish:
-    if: github.event.release.prerelease == false
+    if: github.event_name != 'release' || github.event.release.prerelease == false
     runs-on: ubuntu-latest
 
     steps:
@@ -38,6 +41,7 @@ jobs:
         run: npm install --global "npm@^11.5.1"
 
       - name: Verify release version
+        if: github.event_name == 'release'
         run: |
           package_version="$(node -p "require('./package.json').version")"
           release_version="${GITHUB_REF_NAME#v}"
@@ -47,8 +51,23 @@ jobs:
             exit 1
           fi
 
+      - name: Check whether package version is already published
+        id: package
+        run: |
+          package_name="$(node -p "require('./package.json').name")"
+          package_version="$(node -p "require('./package.json').version")"
+
+          if npm view "${package_name}@${package_version}" version >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "${package_name}@${package_version} is already published; skipping."
+          else
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Type check
+        if: steps.package.outputs.published == 'false'
         run: pnpm exec tsc --noEmit
 
       - name: Publish package
+        if: steps.package.outputs.published == 'false'
         run: npm publish --access public
