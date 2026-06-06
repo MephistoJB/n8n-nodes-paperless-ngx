@@ -344,3 +344,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,node,yarn,visualstudiocode,jetbrains+all
 github_token.md
+github.token.md
