@@ -116,6 +116,16 @@ To get your API token:
 
 Requires n8n version 1.0.0 or later and Paperless-ngx version 2.14.0 or later. Earlier versions may work but are not officially supported or tested.
 
+## Publishing
+
+Stable GitHub releases are automatically published to npm by the `Publish to npm` workflow.
+
+1. Configure a trusted GitHub Actions publisher for the package on npmjs.com using repository `MephistoJB/n8n-nodes-paperless-ngx` and workflow `publish-npm.yml`.
+2. Update the version in `package.json`.
+3. Create a GitHub release whose tag matches the package version, for example `v0.2.13`.
+
+The workflow verifies the version, type checks the project, runs the package's prepublish build and lint checks, and publishes the scoped package through npm trusted publishing with automatic provenance.
+
 ## Resources
 
 - [GitHub repository](https://github.com/MephistoJB/n8n-nodes-paperless-ngx)
