@@ -66,7 +66,7 @@ The node supports the following resources and operations:
 - Get metadata suggestions
 - Get document preview
 - Get document share links
-- List all documents
+- List all documents, optionally filtered by title, tags, and document type
 
 ### Document Metadata
 
