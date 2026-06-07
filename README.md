@@ -66,7 +66,7 @@ The node supports the following resources and operations:
 - Get metadata suggestions
 - Get document preview
 - Get document share links
-- List all documents, optionally filtered by title, tags, and document type
+- List all documents, optionally filtered by title, tags, document type, and storage path
 
 ### Document Metadata
 
@@ -88,6 +88,12 @@ The node supports the following resources and operations:
 - Create/Update/Delete tag
 - Get a tag
 - List all tags
+
+### Storage Path
+
+- Create/Update/Delete storage path
+- Get a storage path
+- List all storage paths
 
 ### Task
 

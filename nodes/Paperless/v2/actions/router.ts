@@ -7,6 +7,7 @@ import * as custom_field from './custom_field/custom_field.resource';
 import * as document from './document/document.resource';
 import * as document_note from './document_note/document_note.resource';
 import * as document_type from './document_type/document_type.resource';
+import * as storage_path from './storage_path/storage_path.resource';
 import * as tag from './tag/tag.resource';
 import * as task from './task/task.resource';
 
@@ -46,6 +47,11 @@ export async function router(this: IExecuteFunctions): Promise<INodeExecutionDat
 				case 'document_type':
 					returnData.push(
 						await document_type[paperlessNodeData.operation].execute.call(this, itemIndex),
+					);
+					break;
+				case 'storage_path':
+					returnData.push(
+						await storage_path[paperlessNodeData.operation].execute.call(this, itemIndex),
 					);
 					break;
 				case 'tag':

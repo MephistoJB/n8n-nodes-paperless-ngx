@@ -39,7 +39,7 @@ This project connects n8n with a Paperless-ngx instance as a community node pack
 - `credentials/` -> Paperless-ngx credential type and token authentication.
 - `nodes/Paperless/Paperless.node.ts` -> versioned node wrapper and base node description.
 - `nodes/Paperless/v2/PaperlessV2.node.ts` -> v2 node implementation, methods, and router entrypoint.
-- `nodes/Paperless/v2/actions/` -> resource and operation modules for ASN, correspondents, custom fields, documents, document notes, document types, tags, and tasks.
+- `nodes/Paperless/v2/actions/` -> resource and operation modules for ASN, correspondents, custom fields, documents, document notes, document types, storage paths, tags, and tasks.
 - `nodes/Paperless/v2/actions/router.ts` -> dispatches each input item to the selected resource operation.
 - `nodes/Paperless/v2/transport/index.ts` -> shared Paperless API request helpers, including paginated requests.
 - `nodes/Paperless/v2/methods/listSearch.ts` -> n8n load-options search helpers.

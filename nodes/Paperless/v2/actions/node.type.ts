@@ -18,6 +18,7 @@ export type PaperlessType = AllEntities<{
 	document_metadata: 'suggest';
 	document_note: 'create' | 'list' | 'remove';
 	document_type: 'create' | 'get' | 'list' | 'remove' | 'update';
+	storage_path: 'create' | 'get' | 'list' | 'remove' | 'update';
 	tag: 'create' | 'get' | 'list' | 'remove' | 'update';
 	task: 'get';
 }>;

@@ -8,6 +8,7 @@ import * as custom_field from './custom_field/custom_field.resource';
 import * as document from './document/document.resource';
 import * as document_note from './document_note/document_note.resource';
 import * as document_type from './document_type/document_type.resource';
+import * as storage_path from './storage_path/storage_path.resource';
 import * as tag from './tag/tag.resource';
 import * as task from './task/task.resource';
 
@@ -64,6 +65,11 @@ credentials: [{ name: 'paperlessApi', required: true }],
 					description: 'Kind of a document',
 				},
 				{
+					name: 'Storage Path',
+					value: 'storage_path',
+					description: 'Filename format and directory structure for documents',
+				},
+				{
 					name: 'Tag',
 					value: 'tag',
 					description: 'Label for documents',
@@ -82,6 +88,7 @@ credentials: [{ name: 'paperlessApi', required: true }],
 		...document.description,
 		...document_note.description,
 		...document_type.description,
+		...storage_path.description,
 		...tag.description,
 		...task.description,
 	],

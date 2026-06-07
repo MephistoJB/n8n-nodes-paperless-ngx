@@ -57,6 +57,41 @@ export const description: INodeProperties[] = [
 				type: 'resourceLocator',
 			},
 			{
+				displayName: 'Storage Path',
+				name: 'storage_path',
+				default: { mode: 'list', value: '' },
+				description: 'Filter documents by storage path',
+				modes: [
+					{
+						displayName: 'From List',
+						name: 'list',
+						placeholder: 'Select a Storage Path...',
+						type: 'list',
+						typeOptions: {
+							searchListMethod: 'storagePathSearch',
+							searchFilterRequired: false,
+							searchable: true,
+						},
+					},
+					{
+						displayName: 'By ID',
+						name: 'id',
+						placeholder: 'Enter Storage Path ID...',
+						type: 'string',
+						validation: [
+							{
+								type: 'regex',
+								properties: {
+									regex: '^[1-9][0-9]*$',
+									errorMessage: 'The ID must be a positive integer',
+								},
+							},
+						],
+					},
+				],
+				type: 'resourceLocator',
+			},
+			{
 				displayName: 'Tags',
 				name: 'tags',
 				default: {},
@@ -128,6 +163,7 @@ export async function execute(
 	const endpoint = '/documents/';
 	const filters = this.getNodeParameter('filters', itemIndex, {}) as {
 		document_type?: INodeParameterResourceLocator;
+		storage_path?: INodeParameterResourceLocator;
 		tags?: { values?: Array<{ tag: INodeParameterResourceLocator }> };
 		title?: string;
 	};
@@ -139,6 +175,10 @@ export async function execute(
 
 	if (filters.document_type?.value) {
 		query.document_type__id = filters.document_type.value;
+	}
+
+	if (filters.storage_path?.value) {
+		query.storage_path__id = filters.storage_path.value;
 	}
 
 	const tagIds = filters.tags?.values?.map(({ tag }) => tag.value).filter(Boolean);
