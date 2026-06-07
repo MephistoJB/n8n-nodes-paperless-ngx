@@ -127,10 +127,9 @@ Requires n8n version 1.0.0 or later and Paperless-ngx version 2.14.0 or later. E
 The `Publish to npm` workflow runs on every push to `main`, when a stable GitHub release is published, and when manually started from the GitHub Actions page.
 
 1. Configure a trusted GitHub Actions publisher for the package on npmjs.com using repository `MephistoJB/n8n-nodes-paperless-ngx` and workflow `publish-npm.yml`.
-2. Update the version in `package.json`.
-3. Push the change to `main`, manually run the workflow, or create a GitHub release whose tag matches the package version, for example `v0.2.13`.
+2. Push a change to `main`, manually run the workflow, or create a GitHub release whose tag matches the package version.
 
-The workflow skips versions that already exist on npm. For new versions, it verifies release tags when applicable, type checks the project, runs the package's prepublish build and lint checks, and publishes the scoped package through npm trusted publishing with automatic provenance.
+If the version already exists on npm, push and manual runs automatically increment the patch version before publishing and commit that version back to `main`. Stable releases keep their explicit tag version. The workflow type checks the project, runs the package's prepublish build and lint checks, and publishes the scoped package through npm trusted publishing with automatic provenance.
 
 ## Resources
 
