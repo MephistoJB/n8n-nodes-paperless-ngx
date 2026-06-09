@@ -57,6 +57,60 @@ export const description: INodeProperties[] = [
 				type: 'resourceLocator',
 			},
 			{
+				displayName: 'Excluded Tags',
+				name: 'excluded_tags',
+				default: {},
+				description: 'Filter out documents that have any selected tag',
+				options: [
+					{
+						displayName: 'Tag',
+						name: 'values',
+						values: [
+							{
+								displayName: 'Tag',
+								name: 'tag',
+								default: { mode: 'list', value: '' },
+								description: 'The tag to exclude',
+								modes: [
+									{
+										displayName: 'From List',
+										name: 'list',
+										placeholder: 'Select a Tag...',
+										type: 'list',
+										typeOptions: {
+											searchListMethod: 'tagSearch',
+											searchFilterRequired: false,
+											searchable: true,
+										},
+									},
+									{
+										displayName: 'By ID',
+										name: 'id',
+										placeholder: 'Enter Tag ID...',
+										type: 'string',
+										validation: [
+											{
+												type: 'regex',
+												properties: {
+													regex: '^[1-9][0-9]*$',
+													errorMessage: 'The ID must be a positive integer',
+												},
+											},
+										],
+									},
+								],
+								type: 'resourceLocator',
+							},
+						],
+					},
+				],
+				placeholder: 'Add Excluded Tag',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+			},
+			{
 				displayName: 'Storage Path',
 				name: 'storage_path',
 				default: { mode: 'list', value: '' },
@@ -140,60 +194,6 @@ export const description: INodeProperties[] = [
 					},
 				],
 				placeholder: 'Add Tag',
-				type: 'fixedCollection',
-				typeOptions: {
-					multipleValues: true,
-				},
-			},
-			{
-				displayName: 'Excluded Tags',
-				name: 'excluded_tags',
-				default: {},
-				description: 'Filter out documents that have any selected tag',
-				options: [
-					{
-						displayName: 'Tag',
-						name: 'values',
-						values: [
-							{
-								displayName: 'Tag',
-								name: 'tag',
-								default: { mode: 'list', value: '' },
-								description: 'The tag to exclude',
-								modes: [
-									{
-										displayName: 'From List',
-										name: 'list',
-										placeholder: 'Select a Tag...',
-										type: 'list',
-										typeOptions: {
-											searchListMethod: 'tagSearch',
-											searchFilterRequired: false,
-											searchable: true,
-										},
-									},
-									{
-										displayName: 'By ID',
-										name: 'id',
-										placeholder: 'Enter Tag ID...',
-										type: 'string',
-										validation: [
-											{
-												type: 'regex',
-												properties: {
-													regex: '^[1-9][0-9]*$',
-													errorMessage: 'The ID must be a positive integer',
-												},
-											},
-										],
-									},
-								],
-								type: 'resourceLocator',
-							},
-						],
-					},
-				],
-				placeholder: 'Add Excluded Tag',
 				type: 'fixedCollection',
 				typeOptions: {
 					multipleValues: true,

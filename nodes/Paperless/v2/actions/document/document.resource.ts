@@ -72,14 +72,14 @@ export const description: INodeProperties[] = [
 				action: 'Get a preview of the document',
 			},
 			{
-				name: 'Get the Document Thumbnail',
-				value: 'get_thumbnail',
-				action: 'Get a thumbnail of the document',
-			},
-			{
 				name: 'Get the Document Share Link',
 				value: 'get_sharelink',
 				action: 'Get the share link of the document',
+			},
+			{
+				name: 'Get the Document Thumbnail',
+				value: 'get_thumbnail',
+				action: 'Get a thumbnail of the document',
 			},
 			{
 				name: 'List Documents',
