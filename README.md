@@ -69,7 +69,7 @@ The node supports the following resources and operations:
 - Get document metadata
 - Get metadata suggestions
 - Get document preview and thumbnail as binary data
-- Include documents with selected tags and exclude documents carrying any selected tag
+- Include documents with selected tags, exclude documents carrying any selected tag, and limit queue-sized results
 - Get document share links
 - List all documents, optionally filtered by title, tags, document type, and storage path
 

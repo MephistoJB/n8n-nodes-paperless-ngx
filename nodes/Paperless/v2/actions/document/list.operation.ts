@@ -5,7 +5,7 @@ import {
 	INodeParameterResourceLocator,
 	INodeProperties,
 } from 'n8n-workflow';
-import { apiRequestPaginated } from '../../transport';
+import { apiRequest, apiRequestPaginated } from '../../transport';
 
 export const description: INodeProperties[] = [
 	{
@@ -208,6 +208,22 @@ export const description: INodeProperties[] = [
 			},
 		],
 	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		type: 'number',
+		default: 0,
+		description: 'Maximum number of documents to return. Use 0 to return all documents.',
+		displayOptions: {
+			show: {
+				resource: ['document'],
+				operation: ['list'],
+			},
+		},
+		typeOptions: {
+			minValue: 0,
+		},
+	},
 ];
 
 export async function execute(
@@ -223,6 +239,7 @@ export async function execute(
 		title?: string;
 	};
 	const query: IDataObject = {};
+	const limit = this.getNodeParameter('limit', itemIndex, 0) as number;
 
 	if (filters.title) {
 		query.title__icontains = filters.title;
@@ -246,14 +263,23 @@ export async function execute(
 		query.tags__id__none = excludedTagIds.join(',');
 	}
 
-	const responses = (await apiRequestPaginated.call(
-		this,
-		itemIndex,
-		'GET',
-		endpoint,
-		undefined,
-		query,
-	)) as unknown[];
+	let responses: unknown[];
+	if (limit > 0) {
+		query.page_size = limit;
+		const response = (await apiRequest.call(this, itemIndex, 'GET', endpoint, undefined, query)) as {
+			results?: unknown[];
+		};
+		responses = response.results?.slice(0, limit) ?? [];
+	} else {
+		responses = (await apiRequestPaginated.call(
+			this,
+			itemIndex,
+			'GET',
+			endpoint,
+			undefined,
+			query,
+		)) as unknown[];
+	}
 
 	return { json: { results: responses } };
 }
