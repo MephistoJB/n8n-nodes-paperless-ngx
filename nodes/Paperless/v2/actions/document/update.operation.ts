@@ -3,6 +3,7 @@ import {
 	INodeExecutionData,
 	INodeParameterResourceLocator,
 	INodeProperties,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { apiRequest } from '../../transport';
 import { getDocumentId } from './utils';
@@ -215,6 +216,15 @@ export const description: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Custom Fields JSON',
+				name: 'custom_fields_json',
+				default: '',
+				description:
+					'JSON array of custom fields. Each entry must contain a field ID and value. Overrides Custom Fields when set.',
+				placeholder: '[{"field": 9, "value": "Mobilfunk"}]',
+				type: 'json',
+			},
+			{
 				displayName: 'Document Type',
 				name: 'document_type',
 				default: { mode: 'list', value: '' },
@@ -339,6 +349,23 @@ export const description: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Tags JSON',
+				name: 'tags_json',
+				default: '',
+				description: 'JSON array of tag IDs. Overrides Tags when set.',
+				placeholder: '[1, 37]',
+				type: 'json',
+			},
+			{
+				displayName: 'Remove Tags JSON',
+				name: 'remove_tags_json',
+				default: '',
+				description:
+					'JSON array of tag IDs to remove while preserving every other existing document tag',
+				placeholder: '[1]',
+				type: 'json',
+			},
+			{
 				displayName: 'Title',
 				name: 'title',
 				default: '',
@@ -360,23 +387,52 @@ export async function execute(
 
 	const updateFields = this.getNodeParameter('update_fields', itemIndex, {}) as any;
 
-	let tags = updateFields.tags?.values.map((tag: any) => Number(tag.tag.value));
+	const parseJsonArray = (value: unknown, fieldName: string): any[] | undefined => {
+		if (value === '' || value === null || value === undefined) return undefined;
 
-	if (updateFields.append_tags && tags && tags.length > 0) {
+		try {
+			const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+			if (!Array.isArray(parsed)) throw new Error('value is not an array');
+			return parsed;
+		} catch (error) {
+			throw new NodeOperationError(
+				this.getNode(),
+				`${fieldName} must be a valid JSON array: ${error instanceof Error ? error.message : error}`,
+				{ itemIndex },
+			);
+		}
+	};
+
+	const tagsJson = parseJsonArray(updateFields.tags_json, 'Tags JSON');
+	const removeTags = parseJsonArray(updateFields.remove_tags_json, 'Remove Tags JSON')?.map(Number);
+	let tags = tagsJson?.map(Number) ?? updateFields.tags?.values.map((tag: any) => Number(tag.tag.value));
+
+	if ((updateFields.append_tags && tags && tags.length > 0) || removeTags?.length) {
 		const currentDocument = (await apiRequest.call(this, itemIndex, 'GET', endpoint)) as any;
-		const currentTags = (currentDocument.tags || []).map((t: any) => Number(t));
-		tags = [...new Set([...currentTags, ...tags])];
+		const currentTags: number[] = (currentDocument.tags || []).map((tag: unknown) => Number(tag));
+		const combinedTags: number[] = updateFields.append_tags
+			? [...currentTags, ...(tags || [])]
+			: tags || currentTags;
+		tags = [...new Set(combinedTags)].filter((tag) => !removeTags?.includes(tag));
 	}
+
+	const customFieldsJson = parseJsonArray(updateFields.custom_fields_json, 'Custom Fields JSON');
+	const customFields =
+		customFieldsJson?.map((customField: any) => ({
+			field: customField.field,
+			value: customField.value,
+		})) ??
+		updateFields.custom_fields?.values.map((customField: any) => ({
+			field: customField.field.value,
+			value: customField.value,
+		}));
 
 	const body = {
 		archive_serial_number: updateFields.archive_serial_number,
 		correspondent: updateFields.correspondent?.value,
 		content: updateFields.content,
 		created: updateFields.created,
-		custom_fields: updateFields.custom_fields?.values.map((customField: any) => ({
-			field: customField.field.value,
-			value: customField.value,
-		})),
+		custom_fields: customFields,
 		document_type: updateFields.document_type?.value,
 		storage_path: updateFields.storage_path?.value,
 		tags,

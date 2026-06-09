@@ -17,6 +17,8 @@
 This is an independent n8n community node package. It lets you use [Paperless-ngx](https://docs.paperless-ngx.com/) in your n8n workflows.
 
 Document updates support Paperless searchable content in addition to document metadata.
+They also support expression-friendly JSON arrays for tags and custom fields,
+including targeted tag removal while preserving all other document tags.
 
 Paperless-ngx is a document management system that transforms your physical documents into a searchable online archive so you can keep your paper documents, but lose the cabinet.
 
