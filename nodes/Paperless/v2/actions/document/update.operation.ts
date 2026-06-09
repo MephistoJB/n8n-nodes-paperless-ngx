@@ -102,6 +102,16 @@ export const description: INodeProperties[] = [
 				type: 'number',
 			},
 			{
+				displayName: 'Content',
+				name: 'content',
+				default: '',
+				description: 'The searchable text content of the document',
+				type: 'string',
+				typeOptions: {
+					rows: 5,
+				},
+			},
+			{
 				displayName: 'Correspondent',
 				name: 'correspondent',
 				default: { mode: 'list', value: '' },
@@ -361,6 +371,7 @@ export async function execute(
 	const body = {
 		archive_serial_number: updateFields.archive_serial_number,
 		correspondent: updateFields.correspondent?.value,
+		content: updateFields.content,
 		created: updateFields.created,
 		custom_fields: updateFields.custom_fields?.values.map((customField: any) => ({
 			field: customField.field.value,
