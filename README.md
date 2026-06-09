@@ -68,7 +68,8 @@ The node supports the following resources and operations:
 - Get document history
 - Get document metadata
 - Get metadata suggestions
-- Get document preview
+- Get document preview and thumbnail as binary data
+- Include documents with selected tags and exclude documents carrying any selected tag
 - Get document share links
 - List all documents, optionally filtered by title, tags, document type, and storage path
 

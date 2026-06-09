@@ -6,6 +6,7 @@ import * as get_history from './get_history.operation';
 import * as get_metadata from './get_metadata.operation';
 import * as get_metadata_suggestions from './get_metadata_suggestions.operation';
 import * as get_preview from './get_preview.operation';
+import * as get_thumbnail from './get_thumbnail.operation';
 import * as get_sharelink from './get_sharelink.operation';
 import * as list from './list.operation';
 import * as remove from './remove.operation';
@@ -18,6 +19,7 @@ export {
 	get_metadata,
 	get_metadata_suggestions,
 	get_preview,
+	get_thumbnail,
 	get_sharelink,
 	list,
 	remove,
@@ -70,6 +72,11 @@ export const description: INodeProperties[] = [
 				action: 'Get a preview of the document',
 			},
 			{
+				name: 'Get the Document Thumbnail',
+				value: 'get_thumbnail',
+				action: 'Get a thumbnail of the document',
+			},
+			{
 				name: 'Get the Document Share Link',
 				value: 'get_sharelink',
 				action: 'Get the share link of the document',
@@ -93,6 +100,7 @@ export const description: INodeProperties[] = [
 	...get_metadata.description,
 	...get_metadata_suggestions.description,
 	...get_preview.description,
+	...get_thumbnail.description,
 	...get_sharelink.description,
 	...list.description,
 	...remove.description,

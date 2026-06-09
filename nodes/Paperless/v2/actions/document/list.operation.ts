@@ -146,6 +146,60 @@ export const description: INodeProperties[] = [
 				},
 			},
 			{
+				displayName: 'Excluded Tags',
+				name: 'excluded_tags',
+				default: {},
+				description: 'Filter out documents that have any selected tag',
+				options: [
+					{
+						displayName: 'Tag',
+						name: 'values',
+						values: [
+							{
+								displayName: 'Tag',
+								name: 'tag',
+								default: { mode: 'list', value: '' },
+								description: 'The tag to exclude',
+								modes: [
+									{
+										displayName: 'From List',
+										name: 'list',
+										placeholder: 'Select a Tag...',
+										type: 'list',
+										typeOptions: {
+											searchListMethod: 'tagSearch',
+											searchFilterRequired: false,
+											searchable: true,
+										},
+									},
+									{
+										displayName: 'By ID',
+										name: 'id',
+										placeholder: 'Enter Tag ID...',
+										type: 'string',
+										validation: [
+											{
+												type: 'regex',
+												properties: {
+													regex: '^[1-9][0-9]*$',
+													errorMessage: 'The ID must be a positive integer',
+												},
+											},
+										],
+									},
+								],
+								type: 'resourceLocator',
+							},
+						],
+					},
+				],
+				placeholder: 'Add Excluded Tag',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+				},
+			},
+			{
 				displayName: 'Title',
 				name: 'title',
 				default: '',
@@ -165,6 +219,7 @@ export async function execute(
 		document_type?: INodeParameterResourceLocator;
 		storage_path?: INodeParameterResourceLocator;
 		tags?: { values?: Array<{ tag: INodeParameterResourceLocator }> };
+		excluded_tags?: { values?: Array<{ tag: INodeParameterResourceLocator }> };
 		title?: string;
 	};
 	const query: IDataObject = {};
@@ -184,6 +239,11 @@ export async function execute(
 	const tagIds = filters.tags?.values?.map(({ tag }) => tag.value).filter(Boolean);
 	if (tagIds?.length) {
 		query.tags__id__all = tagIds.join(',');
+	}
+
+	const excludedTagIds = filters.excluded_tags?.values?.map(({ tag }) => tag.value).filter(Boolean);
+	if (excludedTagIds?.length) {
+		query.tags__id__none = excludedTagIds.join(',');
 	}
 
 	const responses = (await apiRequestPaginated.call(

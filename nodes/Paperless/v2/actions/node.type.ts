@@ -12,6 +12,7 @@ export type PaperlessType = AllEntities<{
 		| 'get_metadata'
 		| 'get_metadata_suggestions'
 		| 'get_preview'
+		| 'get_thumbnail'
 		| 'get_sharelink'
 		| 'remove'
 		| 'update';
