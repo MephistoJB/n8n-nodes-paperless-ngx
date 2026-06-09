@@ -209,19 +209,33 @@ export const description: INodeProperties[] = [
 		],
 	},
 	{
-		displayName: 'Limit',
-		name: 'limit',
-		type: 'number',
-		default: 0,
-		description: 'Maximum number of documents to return. Use 0 to return all documents.',
+		displayName: 'Return All',
+		name: 'returnAll',
+		type: 'boolean',
+		default: true,
+		description: 'Whether to return all results or only up to a given limit',
 		displayOptions: {
 			show: {
 				resource: ['document'],
 				operation: ['list'],
 			},
 		},
+	},
+	{
+		displayName: 'Limit',
+		name: 'limit',
+		type: 'number',
+		default: 50,
+		description: 'Max number of results to return',
+		displayOptions: {
+			show: {
+				resource: ['document'],
+				operation: ['list'],
+				returnAll: [false],
+			},
+		},
 		typeOptions: {
-			minValue: 0,
+			minValue: 1,
 		},
 	},
 ];
@@ -239,7 +253,8 @@ export async function execute(
 		title?: string;
 	};
 	const query: IDataObject = {};
-	const limit = this.getNodeParameter('limit', itemIndex, 0) as number;
+	const returnAll = this.getNodeParameter('returnAll', itemIndex, true) as boolean;
+	const limit = this.getNodeParameter('limit', itemIndex, 50) as number;
 
 	if (filters.title) {
 		query.title__icontains = filters.title;
@@ -264,7 +279,7 @@ export async function execute(
 	}
 
 	let responses: unknown[];
-	if (limit > 0) {
+	if (!returnAll) {
 		query.page_size = limit;
 		const response = (await apiRequest.call(this, itemIndex, 'GET', endpoint, undefined, query)) as {
 			results?: unknown[];
