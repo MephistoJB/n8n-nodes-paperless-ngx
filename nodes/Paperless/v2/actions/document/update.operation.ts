@@ -260,6 +260,15 @@ export const description: INodeProperties[] = [
 				type: 'resourceLocator',
 			},
 			{
+				displayName: 'Remove Tags JSON',
+				name: 'remove_tags_json',
+				default: '',
+				description:
+					'JSON array of tag IDs to remove while preserving every other existing document tag',
+				placeholder: '[1]',
+				type: 'json',
+			},
+			{
 				displayName: 'Storage Path',
 				name: 'storage_path',
 				default: { mode: 'list', value: '' },
@@ -354,15 +363,6 @@ export const description: INodeProperties[] = [
 				default: '',
 				description: 'JSON array of tag IDs. Overrides Tags when set.',
 				placeholder: '[1, 37]',
-				type: 'json',
-			},
-			{
-				displayName: 'Remove Tags JSON',
-				name: 'remove_tags_json',
-				default: '',
-				description:
-					'JSON array of tag IDs to remove while preserving every other existing document tag',
-				placeholder: '[1]',
 				type: 'json',
 			},
 			{
