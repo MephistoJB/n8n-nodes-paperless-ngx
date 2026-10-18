@@ -41,6 +41,11 @@ Install this package in n8n as:
 > [!NOTE]
 > This node requires the `form-data` package for handling multipart/form-data requests. It will be automatically installed as a dependency if not already present in your n8n installation.
 
+Document uploads support inline and stored n8n binary data. Uploads are buffered
+so multipart requests include a calculable `Content-Length`, as required by the
+Paperless upload parser. Large files and concurrent uploads therefore increase
+memory usage.
+
 ## Operations
 
 The node supports the following resources and operations:
