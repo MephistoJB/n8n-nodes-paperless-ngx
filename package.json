@@ -27,6 +27,7 @@
 		"preinstall": "npx only-allow pnpm",
 		"git:commit": "npx czg",
 		"build": "tsc && gulp build:icons",
+		"test": "npm run build && node --test tests/*.test.cjs",
 		"dev": "tsc --watch",
 		"format": "prettier nodes credentials --write",
 		"lint": "eslint nodes credentials package.json",

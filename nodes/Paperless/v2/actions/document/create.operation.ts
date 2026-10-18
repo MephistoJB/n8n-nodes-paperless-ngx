@@ -183,9 +183,7 @@ export async function execute(
 
 	const binaryPropertyName = this.getNodeParameter('binary_property_name', itemIndex) as string;
 	const binaryData = this.helpers.assertBinaryData(itemIndex, binaryPropertyName);
-	const data = binaryData.id
-		? await this.helpers.getBinaryStream(binaryData.id)
-		: Buffer.from(binaryData.data, 'base64');
+	const data = await this.helpers.getBinaryDataBuffer(itemIndex, binaryPropertyName);
 	formData.append('document', data, {
 		filename: binaryData.fileName,
 		contentType: binaryData.mimeType,

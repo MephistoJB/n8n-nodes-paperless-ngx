@@ -79,6 +79,10 @@ jobs:
         if: steps.version.outputs.publish == 'true'
         run: pnpm exec tsc --noEmit
 
+      - name: Upload regression tests
+        if: steps.version.outputs.publish == 'true'
+        run: pnpm test
+
       - name: Publish package
         if: steps.version.outputs.publish == 'true'
         run: npm publish --access public
